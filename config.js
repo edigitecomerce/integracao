@@ -27,4 +27,4 @@ app.use(bodyParser.json());
 app.use(multiparty());
 
 
-module.exports = { app};
+module.exports = {app};

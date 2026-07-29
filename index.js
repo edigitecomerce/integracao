@@ -1,55 +1,24 @@
 const { app } = require('./config');
 
 
-app.get('/', async (req, res, next) => {
-
+app.get('/api/payload', async (req, res, next) => {
     try {
-        const options = {
-            method: 'POST',
-            mode: 'no-cors',
-            origin: '*',
-            headers: {
+        // Faz uma requisição para o seu servidor PHP rodando em outro endereço/porta
+        const response = await fetch('https://edigitecomerce.free.nf/encarte-modelo-estab-fisico/admin/model/api/api.php?pg=get_pagamento');
 
-                accept: '*/*',
-                Authorization: 'Bearer b261e38c-4874-48ad-b20c-5d68baaaa3d6cfe4ea8d4ab1a67cf0c54c8e989f3e4232d0-66a8-4866-bda4-9bb8727221f0',
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify({
-                customer: {
-                    phone: {
-                        country: '+55',
-                        area: '27',
-                        number: '999999999'
-                    },
-                    name: 'João teste',
-                    email: 'joao@teste.com'
-                },
-                reference_id: '101',
-                expiration_date: '2026-06-13T23:45:00+03:00',
-                items: [{
-                    reference_id: '777',
-                    name: 'Nome do Produto',
-                    description: 'desc',
-                    quantity: 1,
-                    unit_amount: 520
-                }],
-                payment_methods: [{
-                    type: 'PIX'
-                }]
-            })
-        };
-        //Produtção: https://api.pagseguro.com/ 
-        fetch('https://sandbox.api.pagseguro.com/checkouts', options)
-            .then(res => res.json())
-            .then(json => {
-                res.status(200).json(json)
-            })
+        // 2. Check if the HTTP status code is ok (200-299)
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
+        // 3. Parse the stream data into JSON
+        const data = await response.json();
 
-
-    } catch (err) {
-        next(err);
+        res.status(200).json(data);
+    } catch (erro) {
+        res.status(500).json({ sucesso: false, erro: erro.message });
     }
+
 });
 /*
 app.get('/get', async (req, res, next) => {
@@ -70,7 +39,7 @@ app.get('/get', async (req, res, next) => {
 
 app.post('/api/paguebank/', async (req, res, next) => {
     try {
-       // res.json(req.body)
+        // res.json(req.body)
         const options = {
             method: 'POST',
             mode: 'no-cors',
@@ -81,7 +50,7 @@ app.post('/api/paguebank/', async (req, res, next) => {
                 Authorization: 'Bearer b261e38c-4874-48ad-b20c-5d68baaaa3d6cfe4ea8d4ab1a67cf0c54c8e989f3e4232d0-66a8-4866-bda4-9bb8727221f0',
                 'Content-type': 'application/json'
             },
-            body:JSON.stringify(req.body)
+            body: JSON.stringify(req.body)
         };
         //Produtção: https://api.pagseguro.com/ 
         fetch('https://sandbox.api.pagseguro.com/checkouts', options)

@@ -1,20 +1,15 @@
 const { app } = require('./config');
-
+const $ = require('jquery');
 
 app.get('/api/payload', async (req, res, next) => {
     try {
         // Faz uma requisição para o seu servidor PHP rodando em outro endereço/porta
-        const response = await fetch('https://edigitecomerce.free.nf/encarte-modelo-estab-fisico/admin/model/api/api.php?pg=get_pagamento');
+        const response = $.get('https://edigitecomerce.free.nf/encarte-modelo-estab-fisico/admin/model/api/api.php?pg=get_pagamento');
 
         // 2. Check if the HTTP status code is ok (200-299)
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+       
 
-        // 3. Parse the stream data into JSON
-        const data = await response.json();
-
-        res.status(200).json(data);
+        res.status(200).json(response);
     } catch (erro) {
         res.status(500).json({ sucesso: false, erro: erro.message });
     }

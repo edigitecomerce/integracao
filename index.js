@@ -37,7 +37,7 @@ app.get('/get', async (req, res, next) => {
 app.post('/api/paguebank/', (req, res, next) => {
     try {
         var data = req.body;
-
+     
         const options = {
             method: 'POST',
             mode: 'no-cors',
@@ -45,7 +45,7 @@ app.post('/api/paguebank/', (req, res, next) => {
             headers: {
 
                 accept: '*/*',
-                Authorization: 'Bearer b261e38c-4874-48ad-b20c-5d68baaaa3d6cfe4ea8d4ab1a67cf0c54c8e989f3e4232d0-66a8-4866-bda4-9bb8727221f0',
+                Authorization: `Bearer ${data.token}`,
                 'Content-type': 'application/json'
             },
             body: JSON.stringify(data)

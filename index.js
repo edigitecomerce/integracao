@@ -1,5 +1,30 @@
 const { app } = require('./config');
 
+app.post('/api/paguebank/consultar/', (req, res, next) => {
+
+    try {
+        var data = req.body;
+        const { id_checkout, token } = data;
+        const options = {
+            method: 'GET',
+            origin: '*',
+
+            headers: { Authorization: `Bearer ${token}`, 'Content-type': 'application/json' }
+        };
+
+        fetch(`https://sandbox.api.pagseguro.com/checkouts/${id_checkout}`, options)
+        .then(res => res.json())
+        .then(json => {
+            res.json(json);
+
+        })
+        .catch(err => console.error(err));
+
+    } catch (err) {
+        next(err);
+    }
+
+})
 
 app.post('/api/paguebank/', (req, res, next) => {
     try {
@@ -47,11 +72,11 @@ app.post('/api/paguebank/inativar/', (req, res, next) => {
         };
 
         fetch(link_inativar, options)
-        .then(res => res.json())
-        .then(element =>
-            res.json(element)
-        )
-        .catch(err => res.json(err));
+            .then(res => res.json())
+            .then(element =>
+                res.json(element)
+            )
+            .catch(err => res.json(err));
 
     } catch (err) {
         next(err)

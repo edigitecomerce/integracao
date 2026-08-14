@@ -1,4 +1,44 @@
 const { app } = require('./config');
+app.post('/api/paguebank/inativar/', (req, res, next) => {
+
+    try {
+        data = req.body;
+        const { url_inativar, token } = data;
+
+        const options = { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-type': 'application/json' } };
+
+        fetch(url_inativar, options)
+            .then(res => res.json())
+            .then(resp =>
+                res.json(resp)
+            )
+            .catch(err => console.error(err));
+
+    } catch (err) {
+        next(err);
+    }
+
+})
+app.post('/api/paguebank/ativar/', (req, res, next) => {
+
+    try {
+        data = req.body;
+        const { url_ativar, token } = data;
+        const options = { method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-type': 'application/json' } };
+
+        fetch(url_ativar, options)
+            .then(res => res.json())
+            .then(resp =>
+                res.json(resp)
+            )
+            .catch(err => console.error(err));
+
+    } catch (err) {
+        next(err);
+    }
+
+})
+
 
 app.post('/api/paguebank/consultar/', (req, res, next) => {
 
@@ -13,12 +53,12 @@ app.post('/api/paguebank/consultar/', (req, res, next) => {
         };
 
         fetch(`https://sandbox.api.pagseguro.com/checkouts/${id_checkout}`, options)
-        .then(res => res.json())
-        .then(json => {
-            res.json(json);
+            .then(res => res.json())
+            .then(json => {
+                res.json(json);
 
-        })
-        .catch(err => console.error(err));
+            })
+            .catch(err => console.error(err));
 
     } catch (err) {
         next(err);
